@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+  Jekyll integration by somiibo.com
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+<title>LOL 전적검색 어플 만들기 - 1</title>
+<meta name="description" content="">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png">
+<link rel="manifest" href="/assets/icon/manifest.json">
+<link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/assets/icon/favicon.ico">
+<meta name="msapplication-config" content="/assets/icon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<!-- CSS -->
+<link rel="stylesheet" href="/assets/css/main.css" />
+<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+
+	</head>
+	<body class="is-loading">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in">
+
+				<!-- Header -->
+        <header id="header">
+          <a href="/" class="logo">Veldic's Blog</a>
+        </header>
+
+				<!-- Nav -->
+					<nav id="nav">
+
+            <ul class="links">
+  <li class=""><a href="/">| Home |</a></li>
+  <li class=""><a href="/about/">| About |</a></li>
+  <li class=" active "><a href="/blog/">| Blog |</a></li>
+  </ul>
+
+<ul class="icons">
+  <li><a href="https://facebook.com/veldic" class="icon fa-facebook" rel="nofollow"><span class="label">Facebook</span></a></li>
+  <li><a href="https://instagram.com/square_min_v" class="icon fa-instagram" rel="nofollow"><span class="label">Instagram</span></a></li>
+  <li><a href="https://github.com/veldic" class="icon fa-github" rel="nofollow"><span class="label">GitHub</span></a></li>
+</ul>
+
+						
+					</nav>
+
+				<!-- Main -->
+				<div id="main">
+          <section class="post">
+    				<header class="major">
+      				<span class="date">21 Jan 2021</span>
+      				<h1>LOL 전적검색 어플 만들기 - 1</h1>
+      				<p>Riot API key 발급 받기</p>
+      			</header>
+      			<div class="image main"><img src="/images/posts/ingyeogg/1/preview.jpg" alt=""></div>
+      			<p><h2 id="리그오브레전드-전적검색-어플">리그오브레전드 전적검색 어플</h2>
+<p>동아리 프로젝트 진행 중에 PR Review를 기다리던 와중 또 다른 Android Application을 만들어보자는 생각이 들었다. application에서 http 통신과 관련하여 공부했던 내용들을 사용해보고자 API가 제공되어 있었던 서비스를 찾고자 했고, 눈에 띄었던 것이 Riot API 였다.</p>
+
+<p>Riot API는 <a href="https://developer.riotgames.com/">Riot Developer Portal</a>에서 찾을 수 있었다. Riot Games에서 서비스하고 있는 League of Legends, Legends of Runeterra, Teamfight Tactics의 API를 제공하고 있었다. 이 중 관심을 가지는 API는 물론 League of Legends API이다.</p>
+
+<h3 id="riot-api">Riot API</h3>
+<p>Riot API를 이용하기 위해서는 먼저 riot games 계정이 필요하다. 게임 아이디를 개발하는데 사용한다니… 뭔가 아이러니했다. 아무튼 게임 아이디를 이용하여 로그인을 하게 되면 API를 이용할 수 있는 development api key를 발급해준다.
+  <br />
+ <span class="image fit"><img src="/images/posts/ingyeogg/1/developmain.png" alt="" /></span>
+  이렇게 발급받은 api key는 24시간 동안 사용할 수 있다. 21년 1월 21일 오전 10시 28분에 받은 api key는 21년 1월 22일 오전 10시 28분까지 사용할 수 있는 것이다. (사진에 나와있는 5시 28분은 태평양 표준시 기준이다.)
+  24시간이 지난 이후에는 아래에 있는 Regenerate API key를 눌러 development api key를 다시 발급받을 수 있다. 하지만 모든 개발자가 이렇게 24시간마다 api key를 갱신해서 사용하지는 않을 것이다. 다행히 Riot에서는 product 등록을 통해 갱신이 필요없는 api key를 발급받을 수 있다.</p>
+
+<p><span class="image fit"><img src="/images/posts/ingyeogg/1/regproduct.png" alt="" /></span></p>
+
+<p>Personal Api key를 이용해준다. 큰 규모의 프로젝트가 아닌 개인 단위의 프로젝트이니 굳이 production api key를 이용할 필요는 없다. register product를 누르게 되면 요약된 policies를 보여준다. 별로 길지 않은 내용이니 하나하나 읽어보면 좋다. 공식 logo 사용 금지, api key 잘 지키기 정도만 염두해두면 좋을 것 같다.</p>
+
+<p>다음 화면에서는 product name, description, group, url 등을 적을 수 있는 공간이 나온다. 대충 자신이 쓸 api 등을 적어두면 되는 것 같다. description은 다음과 같이 작성하였다.</p>
+<div class="box">
+	<p>Ingyeo.gg is a toy project that uses api to search summoner info and matches of my friends. The product will get match histories and make a cool images to share their matches.<br />
+    The product will be serviced (actually just to me and my friends) in android application first, and website lately.<br />
+    The APIs I am going to use are: match, summoner, and champion.</p>
+</div>
+
+<p>
+    <span class="image right">
+        <img src="/images/posts/ngyeogg/1/apps.png" alt="" />
+    </span>
+    신청 이후 조금만 기다리면 apps에 다음과 같이 신청했던 product가 등록되어 있는 것을 확인할 수 있다. 신청 이후 시험기간이었기 때문에 걸리는 시간은 확인할 수 없었다... 아무튼 이제 갱신이 필요없는 api key도 받았으니 개발하는 일만 남았다.
+</p>
+</p>
+      		</section>
+
+          <div class="comments-wrapper">
+          <div id="disqus_thread"></div>
+          <script>
+              /**
+               *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+               *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+               */
+
+              var disqus_config = function () {
+                  this.page.url = '/blog/ingyeogg_1/';  /*Replace PAGE_URL with your page's canonical URL variable*/
+                  this.page.identifier = '/blog/ingyeogg_1/'; /*Replace PAGE_IDENTIFIER with your page's unique identifier variable*/
+              };
+
+              (function() {  /* dont endit below this line */
+                  var d = document, s = d.createElement('script');
+
+                  s.src = 'https://veldic.disqus.com/embed.js';
+
+                  s.setAttribute('data-timestamp', +new Date());
+                  (d.head || d.body).appendChild(s);
+              })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div><!-- /.comments-wrapper -->
+
+
+					<!-- Footer -->
+						<footer>
+              <ul class="actions">
+                <li><a href="/blog/" class="button">Our Blog</a></li>
+              </ul>
+						</footer>
+					</div>
+
+				<!-- Footer -->
+        <footer id="footer">
+  <section>
+    <form method="POST" action="https://api.slapform.com/rsual@snu.ac.kr">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" name="slap_replyto" id="email" /> <!-- slap_replyto will set the reply-to as the submitter's email! -->
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea name="message" id="message" rows="3"></textarea>
+      </div>
+      <ul class="actions">
+        <li><input type="submit" value="Send Message" /></li>
+      </ul>
+      <input type="hidden" name="slap_redirect" value="https://veldic.github.io/thank-you" /> <!-- slap_redirect allows you to set a custom redirect/thank you page -->
+    </form>
+  </section>
+  <section class="split contact">
+    <section class="alt">
+      <h3>Location</h3>
+      <p>Seoul, South Korea</p>
+    </section>
+    
+    <section>
+      <h3>Email</h3>
+      <p><a href="mailto:rsual@snu.ac.kr">rsual@snu.ac.kr</a></p>
+    </section>
+    <section>
+      <h3>Social</h3>
+      <ul class="icons alt">
+        <li><a href="https://facebook.com/veldic" class="icon fa-facebook" rel="nofollow"><span class="label">Facebook</span></a></li>
+        <li><a href="https://instagram.com/square_min_v" class="icon fa-instagram" rel="nofollow"><span class="label">Instagram</span></a></li>
+        <li><a href="https://github.com/veldic" class="icon fa-github" rel="nofollow"><span class="label">GitHub</span></a></li>
+      </ul>
+    </section>
+  </section>
+</footer>
+<!-- Copyright -->
+<div id="copyright">
+  <ul><li>&copy; HTML5 UP</li><li>Design by <a href="https://html5up.net" rel="nofollow">HTML5 UP</a></li><li>Jekyll Integration by <a href="https://slapform.com">Slapform</a> </li></ul>
+</div>
+
+
+			</div>
+
+      <!-- Scripts -->
+  		<!-- DYN -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/skel.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+
+			<script async src="https://www.googletagmanager.com/gtag/js?id=default"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'default');
+</script>
+
+
+	</body>
+</html>

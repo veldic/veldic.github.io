@@ -1,4 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://veldic.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://veldic.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://veldic.github.io/" rel="alternate" type="text/html" /><updated>2021-01-18T20:26:23+09:00</updated><id>https://veldic.github.io/</id><title type="html">Veldic’s Blog</title><subtitle>Jekyll version of the Massively theme by HTML5UP</subtitle><entry><title type="html">씀 - 클론코딩</title><link href="https://veldic.github.io/blog/written-dev/" rel="alternate" type="text/html" title="씀 - 클론코딩" /><published>2021-01-18T00:00:00+09:00</published><updated>2021-01-18T00:00:00+09:00</updated><id>https://veldic.github.io/blog/written-dev</id><content type="html" xml:base="https://veldic.github.io/blog/written-dev/">&lt;h2 id=&quot;씀-클론코딩&quot;&gt;씀 클론코딩&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://veldic.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://veldic.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://veldic.github.io/" rel="alternate" type="text/html" /><updated>2021-01-21T11:04:25+09:00</updated><id>https://veldic.github.io/</id><title type="html">Veldic’s Blog</title><subtitle>Jekyll version of the Massively theme by HTML5UP</subtitle><entry><title type="html">LOL 전적검색 어플 만들기 - 1</title><link href="https://veldic.github.io/blog/ingyeogg_1/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 1" /><published>2021-01-21T00:00:00+09:00</published><updated>2021-01-21T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_1</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_1/">&lt;h2 id=&quot;리그오브레전드-전적검색-어플&quot;&gt;리그오브레전드 전적검색 어플&lt;/h2&gt;
+&lt;p&gt;동아리 프로젝트 진행 중에 PR Review를 기다리던 와중 또 다른 Android Application을 만들어보자는 생각이 들었다. application에서 http 통신과 관련하여 공부했던 내용들을 사용해보고자 API가 제공되어 있었던 서비스를 찾고자 했고, 눈에 띄었던 것이 Riot API 였다.&lt;/p&gt;
+
+&lt;p&gt;Riot API는 &lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;에서 찾을 수 있었다. Riot Games에서 서비스하고 있는 League of Legends, Legends of Runeterra, Teamfight Tactics의 API를 제공하고 있었다. 이 중 관심을 가지는 API는 물론 League of Legends API이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;riot-api&quot;&gt;Riot API&lt;/h3&gt;
+&lt;p&gt;Riot API를 이용하기 위해서는 먼저 riot games 계정이 필요하다. 게임 아이디를 개발하는데 사용한다니… 뭔가 아이러니했다. 아무튼 게임 아이디를 이용하여 로그인을 하게 되면 API를 이용할 수 있는 development api key를 발급해준다.
+  &lt;br /&gt;
+ &lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/posts/ingyeogg/1/developmain.png&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;
+  이렇게 발급받은 api key는 24시간 동안 사용할 수 있다. 21년 1월 21일 오전 10시 28분에 받은 api key는 21년 1월 22일 오전 10시 28분까지 사용할 수 있는 것이다. (사진에 나와있는 5시 28분은 태평양 표준시 기준이다.)
+  24시간이 지난 이후에는 아래에 있는 Regenerate API key를 눌러 development api key를 다시 발급받을 수 있다. 하지만 모든 개발자가 이렇게 24시간마다 api key를 갱신해서 사용하지는 않을 것이다. 다행히 Riot에서는 product 등록을 통해 갱신이 필요없는 api key를 발급받을 수 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/posts/ingyeogg/1/regproduct.png&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Personal Api key를 이용해준다. 큰 규모의 프로젝트가 아닌 개인 단위의 프로젝트이니 굳이 production api key를 이용할 필요는 없다. register product를 누르게 되면 요약된 policies를 보여준다. 별로 길지 않은 내용이니 하나하나 읽어보면 좋다. 공식 logo 사용 금지, api key 잘 지키기 정도만 염두해두면 좋을 것 같다.&lt;/p&gt;
+
+&lt;p&gt;다음 화면에서는 product name, description, group, url 등을 적을 수 있는 공간이 나온다. 대충 자신이 쓸 api 등을 적어두면 되는 것 같다. description은 다음과 같이 작성하였다.&lt;/p&gt;
+&lt;div class=&quot;box&quot;&gt;
+	&lt;p&gt;Ingyeo.gg is a toy project that uses api to search summoner info and matches of my friends. The product will get match histories and make a cool images to share their matches.&lt;br /&gt;
+    The product will be serviced (actually just to me and my friends) in android application first, and website lately.&lt;br /&gt;
+    The APIs I am going to use are: match, summoner, and champion.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+    &lt;span class=&quot;image right&quot;&gt;
+        &lt;img src=&quot;/images/posts/ngyeogg/1/apps.png&quot; alt=&quot;&quot; /&gt;
+    &lt;/span&gt;
+    신청 이후 조금만 기다리면 apps에 다음과 같이 신청했던 product가 등록되어 있는 것을 확인할 수 있다. 신청 이후 시험기간이었기 때문에 걸리는 시간은 확인할 수 없었다... 아무튼 이제 갱신이 필요없는 api key도 받았으니 개발하는 일만 남았다.
+&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">Riot API key 발급 받기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/1/preview.jpg" /></entry><entry><title type="html">씀 - 클론코딩</title><link href="https://veldic.github.io/blog/written-dev/" rel="alternate" type="text/html" title="씀 - 클론코딩" /><published>2021-01-18T00:00:00+09:00</published><updated>2021-01-18T00:00:00+09:00</updated><id>https://veldic.github.io/blog/written-dev</id><content type="html" xml:base="https://veldic.github.io/blog/written-dev/">&lt;h2 id=&quot;씀-클론코딩&quot;&gt;씀 클론코딩&lt;/h2&gt;
 &lt;p&gt;와플 스튜디오에서 2020년 하반기 Rookies Seminar가 끝나고 진행한 toy-project로 여러 조로 나누어서 실제 서비스를 클론 코딩하는 프로젝트를 진행하였고 우리 조는 글쓰기 어플인 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.projectm.ezbrother.ssm&quot;&gt;‘씀’&lt;/a&gt;을 클론 코딩하였다. 코드를 포함한 repository는 아래 버튼에서 확인해볼 수 있다.&lt;/p&gt;
 &lt;ul class=&quot;actions&quot;&gt;
 	&lt;li&gt;&lt;a href=&quot;https://github.com/wafflestudio18-5/team7-android&quot; class=&quot;button special&quot;&gt;github repo&lt;/a&gt;&lt;/li&gt;
