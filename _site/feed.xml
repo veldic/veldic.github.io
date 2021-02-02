@@ -1,4 +1,125 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://veldic.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://veldic.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://veldic.github.io/" rel="alternate" type="text/html" /><updated>2021-01-21T11:04:25+09:00</updated><id>https://veldic.github.io/</id><title type="html">Veldic’s Blog</title><subtitle>Jekyll version of the Massively theme by HTML5UP</subtitle><entry><title type="html">LOL 전적검색 어플 만들기 - 1</title><link href="https://veldic.github.io/blog/ingyeogg_1/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 1" /><published>2021-01-21T00:00:00+09:00</published><updated>2021-01-21T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_1</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_1/">&lt;h2 id=&quot;리그오브레전드-전적검색-어플&quot;&gt;리그오브레전드 전적검색 어플&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://veldic.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://veldic.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://veldic.github.io/" rel="alternate" type="text/html" /><updated>2021-02-02T15:42:37+09:00</updated><id>https://veldic.github.io/</id><title type="html">Veldic’s Blog</title><subtitle>Jekyll version of the Massively theme by HTML5UP</subtitle><entry><title type="html">LOL 전적검색 어플 만들기 - 2</title><link href="https://veldic.github.io/blog/ingyeogg_2/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 2" /><published>2021-02-01T00:00:00+09:00</published><updated>2021-02-01T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_2</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_2/">&lt;h2 id=&quot;riot-api-이용해보기&quot;&gt;Riot API 이용해보기&lt;/h2&gt;
+&lt;p&gt;이전 포스팅에서 Riot API를 이용하기 위해 api key를 사용할 수 있도록 승인받는 과정을 다루었다. 이번 포스팅에선 Riot API를 이용하여 정보를 받아올 것이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;소환사summoner-정보-받아오기&quot;&gt;소환사(Summoner) 정보 받아오기&lt;/h3&gt;
+&lt;p&gt;소환사 이름을 검색하는 것으로 전적 검색은 시작된다. 소환사 이름만으로 그 유저의 레벨, 티어, 전적 등 모든 정보를 가지고 올 수 있어야 한다는 뜻이다. 따라서 소환사 이름을 이용하는 endpoint를 먼저 이용해야 했다.&lt;/p&gt;
+
+&lt;p&gt;2021.02.01. 기준 SUMMONER-V4 api를 이용했다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/lol/summoner/v4/summoners/by-name/{summonerName}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;위 endpoint를 통해 소환사 이름으로 유저를 검색할 수 있었다. response는 다음과 같다.
+ &lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/posts/ingyeogg/2/summonerdto.png&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;postman을 이용하여 소환사 이름으로 검색을 한 결과 다음과 같은 response를 얻을 수 있었다.
+이 때 발급받은 Riot api key는 header에&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;X-Riot-Token : RGAPI-(token detail)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;와 같이 넣어주면 된다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/쟁반같이둥근솔
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;를 이용하여 받은 response는 다음과 같다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;tnyzVFP-mXvqzlg0dgqXo56s9Iww3ew6rEMvOihKD-hlEbk&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;accountId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JRkXZ259_plgvMn_N-PMxNNEdasSmd0eciYQlZJiXfO_Akyhw0kkigGv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;puuid&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;f6uPGHs1epLFCaCecnFR637vzpyvxfmLuUqBlItPikFn7VQd9w56jQzeHWXQJUN4R-LXq-kspJim3Q&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;쟁반같이둥근솔&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;profileIconId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4232&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;revisionDate&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1611389825000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;summonerLevel&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;159&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;다양한 결과값을 얻을 수 있는데, 유저에 관한 id value가 3개 (id, accountId, puuid), 소환사 이름, 프로필 아이콘 id, 프로필 업데이트 시간, 소환사 레벨을 알 수 있다.&lt;/p&gt;
+
+&lt;p&gt;이 중에서 전적검색을 위해 사용해야 하는 값은 ‘accountId’ 값이다. 다른 endpoint에서 encryptedAccountId로 사용되는 값으로, 우리가 사용할 MATCH-V4 api에서 이용되는 값이다. 자세하게는, 사용할 matchlists endpoint의 형태가 다음과 같다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/lol/match/v4/matchlists/by-account/{encryptedAccountId}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;전적-리스트-match-list-받아오기&quot;&gt;전적 리스트 (match list) 받아오기&lt;/h3&gt;
+&lt;p&gt;계속 진행해보자. 우리가 목표로 하는 서비스는 전적 검색, 즉 소환사 이름으로 검색을 하면 그 사람의 최근 전적(10여 개 정도로 잡자)을 보여주는 서비스이다. 그렇다면 matchlist를 받아와야 한다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/lol/match/v4/matchlists/by-account/{encryptedAccountId}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;위 endpoint는 다양한 query params를 지원한다. 
+ &lt;span class=&quot;image fit&quot;&gt;&lt;img src=&quot;/images/posts/ingyeogg/2/matchlistqueryparams.png&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;
+챔피언, 큐 타입(솔로랭크, 일반, 무작위 총력전 등), 기간, index(pagination)의 params를 추가할 수 있음을 알 수 있다. 일단 params를 추가하지 않은 채로 검색을 하면 다음과 같은 결과를 얻을 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;matches&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;platformId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;KR&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;gameId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4969263831&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;champion&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;235&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;queue&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;440&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;season&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;timestamp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1612235049276&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;role&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;DUO_CARRY&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;lane&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;BOTTOM&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;98&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;개의&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;info)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;platformId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;KR&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;gameId&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4868416349&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;champion&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;55&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;queue&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;420&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;season&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;timestamp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1608739611268&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;role&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;SOLO&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;lane&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;MID&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;startIndex&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;endIndex&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;totalGames&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;131&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;기본적으로 startIndex = 0, endIndex = startIndex + 100으로 설정되기 때문에 startIndex, endIndex가 각각 0과 100으로 설정되어 있음을 확인할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;각각의 match에 대한 정보로는 platformId(region 정보인 듯 하다), gameId, 챔피언 id, 큐 타입, 시즌, 시간, 역할 및 라인을 받아올 수 있었다. 하지만 전적검색에 필수적으로 필요한 승리/패배 정보나 KDA 정보는 알 수 없었다.&lt;/p&gt;
+
+&lt;h3 id=&quot;매치-정보-받아오기&quot;&gt;매치 정보 받아오기&lt;/h3&gt;
+&lt;p&gt;승리/패배 여부나 KDA 정보를 받아오기 위해서는 각각의 매치에 대한 정보가 필요하다. 이는 다음 endpoint를 통해 받아올 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/lol/match/v4/matches/{matchId}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;이 때 사용하는 matchId는 위 matchlist에서 각각의 match의 gameId를 이용하면 된다.
+위 endpoint의 response는 너무 복잡해서 본 포스팅에선 다루지 않겠다. 궁금하다면 직접 &lt;a href=&quot;https://developer.riotgames.com/apis#match-v4/GET_getMatch&quot;&gt;확인&lt;/a&gt;해보길 바란다.&lt;/p&gt;
+
+&lt;p&gt;matchId를 통해 받은 response에서&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;participantIdentities.player.currentAccountId == accountId
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;인 player의 teamId를 가져온 뒤,&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;teams.teamId == teamId
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;인 team의 win value를 가져오면 그 게임을 유저가 승리했는지 알 수 있다.&lt;/p&gt;
+
+&lt;p&gt;이러한 과정을 거치면 간단하게 승리/패배를 알 수 있는 전적검색을 할 수 있다.
+위와 같은 과정을 Android로 작성하면 간단한 전적검색 app을 만들 수 있다. 다음 포스팅에선 이 과정과 과정에서 생긴 문제점들, 그리고 그 문제점의 해결 방안을 찾아볼 것이다.&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">Riot API 이용하기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/2/preview.jpeg" /></entry><entry><title type="html">LOL 전적검색 어플 만들기 - 1</title><link href="https://veldic.github.io/blog/ingyeogg_1/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 1" /><published>2021-01-23T00:00:00+09:00</published><updated>2021-01-23T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_1</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_1/">&lt;h2 id=&quot;리그오브레전드-전적검색-어플&quot;&gt;리그오브레전드 전적검색 어플&lt;/h2&gt;
 &lt;p&gt;동아리 프로젝트 진행 중에 PR Review를 기다리던 와중 또 다른 Android Application을 만들어보자는 생각이 들었다. application에서 http 통신과 관련하여 공부했던 내용들을 사용해보고자 API가 제공되어 있었던 서비스를 찾고자 했고, 눈에 띄었던 것이 Riot API 였다.&lt;/p&gt;
 
 &lt;p&gt;Riot API는 &lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;에서 찾을 수 있었다. Riot Games에서 서비스하고 있는 League of Legends, Legends of Runeterra, Teamfight Tactics의 API를 제공하고 있었다. 이 중 관심을 가지는 API는 물론 League of Legends API이다.&lt;/p&gt;
@@ -26,7 +147,11 @@
         &lt;img src=&quot;/images/posts/ngyeogg/1/apps.png&quot; alt=&quot;&quot; /&gt;
     &lt;/span&gt;
     신청 이후 조금만 기다리면 apps에 다음과 같이 신청했던 product가 등록되어 있는 것을 확인할 수 있다. 신청 이후 시험기간이었기 때문에 걸리는 시간은 확인할 수 없었다... 아무튼 이제 갱신이 필요없는 api key도 받았으니 개발하는 일만 남았다.
-&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">Riot API key 발급 받기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/1/preview.jpg" /></entry><entry><title type="html">씀 - 클론코딩</title><link href="https://veldic.github.io/blog/written-dev/" rel="alternate" type="text/html" title="씀 - 클론코딩" /><published>2021-01-18T00:00:00+09:00</published><updated>2021-01-18T00:00:00+09:00</updated><id>https://veldic.github.io/blog/written-dev</id><content type="html" xml:base="https://veldic.github.io/blog/written-dev/">&lt;h2 id=&quot;씀-클론코딩&quot;&gt;씀 클론코딩&lt;/h2&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;
+&lt;a href=&quot;https://velog.io/@junhok82/RIOT-API%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%A1%A4-%EC%A0%84%EC%A0%81-%EA%B2%80%EC%83%89-%EC%82%AC%EC%9D%B4%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0-1&quot;&gt;🚨 RIOT API를 이용해서 롤 전적 검색 사이트 만들기 (1) - RIOT API 승인&lt;/a&gt;&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">Riot API key 발급 받기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/1/preview.jpg" /></entry><entry><title type="html">씀 - 클론코딩</title><link href="https://veldic.github.io/blog/written-dev/" rel="alternate" type="text/html" title="씀 - 클론코딩" /><published>2021-01-18T00:00:00+09:00</published><updated>2021-01-18T00:00:00+09:00</updated><id>https://veldic.github.io/blog/written-dev</id><content type="html" xml:base="https://veldic.github.io/blog/written-dev/">&lt;h2 id=&quot;씀-클론코딩&quot;&gt;씀 클론코딩&lt;/h2&gt;
 &lt;p&gt;와플 스튜디오에서 2020년 하반기 Rookies Seminar가 끝나고 진행한 toy-project로 여러 조로 나누어서 실제 서비스를 클론 코딩하는 프로젝트를 진행하였고 우리 조는 글쓰기 어플인 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.projectm.ezbrother.ssm&quot;&gt;‘씀’&lt;/a&gt;을 클론 코딩하였다. 코드를 포함한 repository는 아래 버튼에서 확인해볼 수 있다.&lt;/p&gt;
 &lt;ul class=&quot;actions&quot;&gt;
 	&lt;li&gt;&lt;a href=&quot;https://github.com/wafflestudio18-5/team7-android&quot; class=&quot;button special&quot;&gt;github repo&lt;/a&gt;&lt;/li&gt;
