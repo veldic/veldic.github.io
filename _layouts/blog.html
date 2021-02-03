@@ -35,12 +35,15 @@
             <header class="major">
               <h2><a href="#">Posts</a></h2>
 			</header>
+
+			{% for postpre in site.posts %}
+				<a href="{{ postpre.url | absolute_url }}">{{ postpre.title }}</a><br>
+			{% endfor %}
 			
           </article>
 					<!-- Post -->
 					<section class="posts">
 						{% for post in site.posts %}
-						{% assign mod3 = forloop.index | modulo: 3 %}
 							<article>
 								<header>
 									<span class="date">{{ post.date | date_to_string }}</span>
@@ -52,14 +55,6 @@
 									<li><a href="{{ post.url | absolute_url }}" class="button">더 읽어보기</a></li>
 								</ul>
 							</article>
-							{% if mod3 == 0 %}
-							<article>
-								<header>
-									<h2><a href="#"></a></h2>
-								</header>
-
-							</article>
-							{% endif %}
 						{% endfor %}
 
 					</section>

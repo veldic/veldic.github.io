@@ -78,8 +78,14 @@ sitemap:
                   {% if mod3 == 0 %}
                   <article>
   									<header>
-  										<h2><a href="#"></a></h2>
-  									</header>
+  										<h2><a href="{{ "/blog/" | absolute_url }}">포스팅 더 보기</a></h2>
+									</header>
+									
+									{% for postpre in site.posts limit:7 %}
+										<a href="{{ postpre.url | absolute_url }}">{{ postpre.title }}</a><br>
+									{% endfor %}
+
+									<a href="{{ "/blog/" | absolute_url }}">and more...</a>
 
   								</article>
                   {% endif %}
