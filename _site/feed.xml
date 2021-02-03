@@ -1,4 +1,96 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://veldic.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://veldic.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://veldic.github.io/" rel="alternate" type="text/html" /><updated>2021-02-02T16:19:46+09:00</updated><id>https://veldic.github.io/</id><title type="html">Veldic’s Blog</title><subtitle>Jekyll version of the Massively theme by HTML5UP</subtitle><entry><title type="html">LOL 전적검색 어플 만들기 - 2</title><link href="https://veldic.github.io/blog/ingyeogg_2/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 2" /><published>2021-02-01T00:00:00+09:00</published><updated>2021-02-01T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_2</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_2/">&lt;h2 id=&quot;riot-api-이용해보기&quot;&gt;Riot API 이용해보기&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="https://veldic.github.io/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.2.1">Jekyll</generator><link href="https://veldic.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://veldic.github.io/" rel="alternate" type="text/html" /><updated>2021-02-03T11:04:41+09:00</updated><id>https://veldic.github.io/</id><title type="html">Veldic’s Blog</title><subtitle>Veldic</subtitle><entry><title type="html">LOL 전적검색 어플 만들기 - 3</title><link href="https://veldic.github.io/blog/ingyeogg_3/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 3" /><published>2021-02-02T00:00:00+09:00</published><updated>2021-02-02T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_3</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_3/">&lt;h2 id=&quot;안드로이드-앱-프로토타입-제작&quot;&gt;안드로이드 앱 프로토타입 제작&lt;/h2&gt;
+
+&lt;p&gt;&lt;span class=&quot;image right&quot;&gt;&lt;img src=&quot;/images/posts/ingyeogg/3/prototype.gif&quot; alt=&quot;&quot; /&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;이전 포스팅에서 Riot API의 구조와 사용하는 방법에 대해 알아보았다. 이번 포스팅에선 Riot API를 활용하여 전적검색 어플의 프로토타입을 만들어 볼 것이다.&lt;/p&gt;
+
+&lt;p&gt;프로토타입이 가지고자 하는 목표는 다음과 같다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;소환사 이름으로 검색 가능&lt;/li&gt;
+  &lt;li&gt;소환사 정보 표시 (레벨)&lt;/li&gt;
+  &lt;li&gt;소환사 전적 표시 (10개 정도)&lt;/li&gt;
+  &lt;li&gt;각 판마다 승리/패배 여부&lt;/li&gt;
+  &lt;li&gt;각 판마다 유저가 사용한 챔피언&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;챔피언 초상화나 소환사 아이콘 등 그림을 사용한 부분은 구현하지 않았다. &lt;del&gt;귀찮았다&lt;/del&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;기본-스펙&quot;&gt;기본 스펙&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Dagger Hilt&lt;/li&gt;
+  &lt;li&gt;RxJava&lt;/li&gt;
+  &lt;li&gt;OkHttp&lt;/li&gt;
+  &lt;li&gt;Retrofit&lt;/li&gt;
+  &lt;li&gt;Moshi&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;구현&quot;&gt;구현&lt;/h3&gt;
+&lt;p&gt;디테일한 구현은 생략하고 기본 로직을 살펴보면 다음과 같다.
+(RxJava가 익숙하지 않았던 때 작성했던 코드라 flatMap 등을 이용하지 않았다. RxJava를 제대로 사용하지 않는 코드여도 이해 바란다.)&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;search_button&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setOnClickListener&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;viewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getSumbySumName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summoner_edit_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subscribeOn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Schedulers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;observeOn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AndroidSchedulers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subscribe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;viewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summoner&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;level_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;viewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summoner&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;summonerLevel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;viewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMatchesByAccount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;accountId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subscribeOn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Schedulers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;observeOn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AndroidSchedulers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subscribe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;forEach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;viewModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getMatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gameId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subscribeOn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Schedulers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+                            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;observeOn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AndroidSchedulers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mainThread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+                            &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subscribe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MATCH&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;got match info!&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;notifyDataSetChanged&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+                            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                                    &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MATCH&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Something went wrong&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                                &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MATCHES&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Something went wrong&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+
+        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SUMMONER&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Something went wrong&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;코드를 간단히 설명하면&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;getSumbySumName()을 통해 EditText에 있는 소환사 이름으로 검색한다.&lt;/li&gt;
+  &lt;li&gt;소환사 정보를 가져왔다면 getMatchesByAccount()를 통해 유저의 최근 전적 10개를 검색한다.&lt;/li&gt;
+  &lt;li&gt;각각의 match에 대해 getMatch()를 통해 전적의 디테일을 가져와 recyclerview adapter에 넘긴다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;이 3개의 로직으로 이루어져 있다.
+더욱 자세한 코드는 &lt;a href=&quot;https://github.com/veldic/ingyeo-gg/pull/1&quot;&gt;이곳&lt;/a&gt;을 참고바란다.&lt;/p&gt;
+
+&lt;p&gt;이 과정에서 문제가 발생한다. 10개의 전적을 불러오기 위해 총 11번의 http request를 전송해야 한다는 것이다. (&lt;a href=&quot;https://velog.io/@kim6515516/npuls&quot;&gt;N+1 query problem&lt;/a&gt;과 문제상황이 비슷하다. 그렇다고 api request로 join을 요청할 수는 없지 않은가…) 20개의 전적을 불러오기 위해서는 21번의 http request가 요구되는데 이는 personal api key 제한인 20 requests every 1 second의 제한을 넘어서는 것이다.(personal api key에 대해서는 &lt;a href=&quot;https://veldic.github.io/blog/ingyeogg_1/&quot;&gt;1번째 포스팅&lt;/a&gt; 참고) 물론 production api key를 받게 되면 request 제한이 조금 풀리겠지만 그렇다고 근본적인 문제가 해결되지는 않지 않은가.&lt;/p&gt;
+
+&lt;p&gt;또한 api key를 android 코드 내에 저장해야하는 문제도 발생한다. 분명 riot api에서는 api key를 잘 간수하라고 하였다. 하지만 클라이언트에서 직접 request를 날릴 수 있게 되면 애플리케이션을 사용하는 모든 사용자가 api key를 확인할 수 있음을 뜻한다.&lt;/p&gt;
+
+&lt;p&gt;결국 backend server가 필요하게 되었다. backend server에 요구되는 사항은 다음과 같다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;초당, 분당 request 제한을 관리할 것&lt;/li&gt;
+  &lt;li&gt;response를 적절히 가공하여 클라이언트에서 사용하기 쉽도록 할 것&lt;/li&gt;
+  &lt;li&gt;api key를 잘 간수할 수 있을 것 (최소한 클라이언트가 api key를 알 수 없도록 할 것)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;점차 프로젝트가 산으로 가는 것 같지만… 일단 부딫히고 본다.&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://velog.io/@kim6515516/npuls&quot;&gt;장고에서 n+1 쿼리 문제 (성능이슈)&lt;/a&gt;&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">전적검색 Android Application 프로토타입 만들어보기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/3/preview.jpeg" /></entry><entry><title type="html">LOL 전적검색 어플 만들기 - 2</title><link href="https://veldic.github.io/blog/ingyeogg_2/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 2" /><published>2021-02-01T00:00:00+09:00</published><updated>2021-02-01T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_2</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_2/">&lt;h2 id=&quot;riot-api-이용해보기&quot;&gt;Riot API 이용해보기&lt;/h2&gt;
 &lt;p&gt;이전 포스팅에서 Riot API를 이용하기 위해 api key를 사용할 수 있도록 승인받는 과정을 다루었다. 이번 포스팅에선 Riot API를 이용하여 정보를 받아올 것이다.&lt;/p&gt;
 
 &lt;h3 id=&quot;소환사summoner-정보-받아오기&quot;&gt;소환사(Summoner) 정보 받아오기&lt;/h3&gt;
@@ -119,7 +211,10 @@
 &lt;p&gt;인 team의 win value를 가져오면 그 게임을 유저가 승리했는지 알 수 있다.&lt;/p&gt;
 
 &lt;p&gt;이러한 과정을 거치면 간단하게 승리/패배를 알 수 있는 전적검색을 할 수 있다.
-위와 같은 과정을 Android로 작성하면 간단한 전적검색 app을 만들 수 있다. 다음 포스팅에선 이 과정과 과정에서 생긴 문제점들, 그리고 그 문제점의 해결 방안을 찾아볼 것이다.&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">Riot API 이용하기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/2/preview.jpeg" /></entry><entry><title type="html">LOL 전적검색 어플 만들기 - 1</title><link href="https://veldic.github.io/blog/ingyeogg_1/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 1" /><published>2021-01-21T00:00:00+09:00</published><updated>2021-01-21T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_1</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_1/">&lt;h2 id=&quot;리그오브레전드-전적검색-어플&quot;&gt;리그오브레전드 전적검색 어플&lt;/h2&gt;
+위와 같은 과정을 Android로 작성하면 간단한 전적검색 app을 만들 수 있다. 다음 포스팅에선 이 과정과 과정에서 생긴 문제점들, 그리고 그 문제점의 해결 방안을 찾아볼 것이다.&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">Riot API 이용하기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/2/preview.jpeg" /></entry><entry><title type="html">LOL 전적검색 어플 만들기 - 1</title><link href="https://veldic.github.io/blog/ingyeogg_1/" rel="alternate" type="text/html" title="LOL 전적검색 어플 만들기 - 1" /><published>2021-01-21T00:00:00+09:00</published><updated>2021-01-21T00:00:00+09:00</updated><id>https://veldic.github.io/blog/ingyeogg_1</id><content type="html" xml:base="https://veldic.github.io/blog/ingyeogg_1/">&lt;h2 id=&quot;리그오브레전드-전적검색-어플&quot;&gt;리그오브레전드 전적검색 어플&lt;/h2&gt;
 &lt;p&gt;동아리 프로젝트 진행 중에 PR Review를 기다리던 와중 또 다른 Android Application을 만들어보자는 생각이 들었다. application에서 http 통신과 관련하여 공부했던 내용들을 사용해보고자 API가 제공되어 있었던 서비스를 찾고자 했고, 눈에 띄었던 것이 Riot API 였다.&lt;/p&gt;
 
 &lt;p&gt;Riot API는 &lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;에서 찾을 수 있었다. Riot Games에서 서비스하고 있는 League of Legends, Legends of Runeterra, Teamfight Tactics의 API를 제공하고 있었다. 이 중 관심을 가지는 API는 물론 League of Legends API이다.&lt;/p&gt;
@@ -150,7 +245,7 @@
 &lt;/p&gt;
 
 &lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;
+&lt;p&gt;&lt;a href=&quot;https://developer.riotgames.com/&quot;&gt;Riot Developer Portal&lt;/a&gt;&lt;br /&gt;
 &lt;a href=&quot;https://velog.io/@junhok82/RIOT-API%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-%EB%A1%A4-%EC%A0%84%EC%A0%81-%EA%B2%80%EC%83%89-%EC%82%AC%EC%9D%B4%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0-1&quot;&gt;🚨 RIOT API를 이용해서 롤 전적 검색 사이트 만들기 (1) - RIOT API 승인&lt;/a&gt;&lt;/p&gt;</content><category term="league-of-legends" /><category term="project" /><summary type="html">Riot API key 발급 받기</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://veldic.github.io/images/posts/ingyeogg/1/preview.jpg" /></entry><entry><title type="html">씀 - 클론코딩</title><link href="https://veldic.github.io/blog/written-dev/" rel="alternate" type="text/html" title="씀 - 클론코딩" /><published>2021-01-18T00:00:00+09:00</published><updated>2021-01-18T00:00:00+09:00</updated><id>https://veldic.github.io/blog/written-dev</id><content type="html" xml:base="https://veldic.github.io/blog/written-dev/">&lt;h2 id=&quot;씀-클론코딩&quot;&gt;씀 클론코딩&lt;/h2&gt;
 &lt;p&gt;와플 스튜디오에서 2020년 하반기 Rookies Seminar가 끝나고 진행한 toy-project로 여러 조로 나누어서 실제 서비스를 클론 코딩하는 프로젝트를 진행하였고 우리 조는 글쓰기 어플인 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.projectm.ezbrother.ssm&quot;&gt;‘씀’&lt;/a&gt;을 클론 코딩하였다. 코드를 포함한 repository는 아래 버튼에서 확인해볼 수 있다.&lt;/p&gt;
 &lt;ul class=&quot;actions&quot;&gt;

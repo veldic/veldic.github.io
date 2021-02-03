@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+  Jekyll integration by somiibo.com
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+<title>LOL 전적검색 어플 만들기 - 3</title>
+<meta name="description" content="">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png">
+<link rel="manifest" href="/assets/icon/manifest.json">
+<link rel="mask-icon" href="/assets/icon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/assets/icon/favicon.ico">
+<meta name="msapplication-config" content="/assets/icon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<!-- CSS -->
+<link rel="stylesheet" href="/assets/css/main.css" />
+<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
+
+	</head>
+	<body class="is-loading">
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in">
+
+				<!-- Header -->
+        <header id="header">
+          <a href="/" class="logo">Veldic's Blog</a>
+        </header>
+
+				<!-- Nav -->
+					<nav id="nav">
+
+            <ul class="links">
+  <li class=""><a href="/">| Home |</a></li>
+  <li class=""><a href="/about/">| About |</a></li>
+  <li class=" active "><a href="/blog/">| Blog |</a></li>
+  </ul>
+
+<ul class="icons">
+  <li><a href="https://facebook.com/veldic" class="icon fa-facebook" rel="nofollow"><span class="label">Facebook</span></a></li>
+  <li><a href="https://instagram.com/square_min_v" class="icon fa-instagram" rel="nofollow"><span class="label">Instagram</span></a></li>
+  <li><a href="https://github.com/veldic" class="icon fa-github" rel="nofollow"><span class="label">GitHub</span></a></li>
+</ul>
+
+						
+					</nav>
+
+				<!-- Main -->
+				<div id="main">
+          <section class="post">
+    				<header class="major">
+      				<span class="date">02 Feb 2021</span>
+      				<h1>LOL 전적검색 어플 만들기 - 3</h1>
+      				<p>전적검색 Android Application 프로토타입 만들어보기</p>
+      			</header>
+      			<div class="image main"><img src="/images/posts/ingyeogg/3/preview.jpeg" alt=""></div>
+      			<p><h2 id="안드로이드-앱-프로토타입-제작">안드로이드 앱 프로토타입 제작</h2>
+
+<p><span class="image right"><img src="/images/posts/ingyeogg/3/prototype.gif" alt="" /></span></p>
+
+<p>이전 포스팅에서 Riot API의 구조와 사용하는 방법에 대해 알아보았다. 이번 포스팅에선 Riot API를 활용하여 전적검색 어플의 프로토타입을 만들어 볼 것이다.</p>
+
+<p>프로토타입이 가지고자 하는 목표는 다음과 같다.</p>
+
+<ol>
+  <li>소환사 이름으로 검색 가능</li>
+  <li>소환사 정보 표시 (레벨)</li>
+  <li>소환사 전적 표시 (10개 정도)</li>
+  <li>각 판마다 승리/패배 여부</li>
+  <li>각 판마다 유저가 사용한 챔피언</li>
+</ol>
+
+<p>챔피언 초상화나 소환사 아이콘 등 그림을 사용한 부분은 구현하지 않았다. <del>귀찮았다</del></p>
+
+<h3 id="기본-스펙">기본 스펙</h3>
+<ul>
+  <li>Dagger Hilt</li>
+  <li>RxJava</li>
+  <li>OkHttp</li>
+  <li>Retrofit</li>
+  <li>Moshi</li>
+</ul>
+
+<h3 id="구현">구현</h3>
+<p>디테일한 구현은 생략하고 기본 로직을 살펴보면 다음과 같다.
+(RxJava가 익숙하지 않았던 때 작성했던 코드라 flatMap 등을 이용하지 않았다. RxJava를 제대로 사용하지 않는 코드여도 이해 바란다.)</p>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="n">search_button</span><span class="p">.</span><span class="n">setOnClickListener</span> <span class="p">{</span>
+    <span class="n">viewModel</span><span class="p">.</span><span class="n">getSumbySumName</span><span class="p">(</span><span class="n">summoner_edit_text</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">toString</span><span class="p">())</span>
+        <span class="p">.</span><span class="n">subscribeOn</span><span class="p">(</span><span class="n">Schedulers</span><span class="p">.</span><span class="n">io</span><span class="p">())</span>
+        <span class="p">.</span><span class="n">observeOn</span><span class="p">(</span><span class="n">AndroidSchedulers</span><span class="p">.</span><span class="n">mainThread</span><span class="p">())</span>
+        <span class="p">.</span><span class="n">subscribe</span><span class="p">({</span>
+            <span class="n">viewModel</span><span class="p">.</span><span class="n">summoner</span> <span class="p">=</span> <span class="n">it</span>
+            <span class="n">level_text</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">viewModel</span><span class="p">.</span><span class="n">summoner</span><span class="p">.</span><span class="n">summonerLevel</span><span class="p">.</span><span class="n">toString</span><span class="p">()</span>
+            <span class="n">viewModel</span><span class="p">.</span><span class="n">getMatchesByAccount</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="n">accountId</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">subscribeOn</span><span class="p">(</span><span class="n">Schedulers</span><span class="p">.</span><span class="n">io</span><span class="p">())</span>
+                <span class="p">.</span><span class="n">observeOn</span><span class="p">(</span><span class="n">AndroidSchedulers</span><span class="p">.</span><span class="n">mainThread</span><span class="p">())</span>
+                <span class="p">.</span><span class="n">subscribe</span><span class="p">({</span>
+                    <span class="n">it</span><span class="p">.</span><span class="n">matches</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span>
+                        <span class="n">viewModel</span><span class="p">.</span><span class="n">getMatch</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="n">gameId</span><span class="p">)</span>
+                            <span class="p">.</span><span class="n">subscribeOn</span><span class="p">(</span><span class="n">Schedulers</span><span class="p">.</span><span class="n">io</span><span class="p">())</span>
+                            <span class="p">.</span><span class="n">observeOn</span><span class="p">(</span><span class="n">AndroidSchedulers</span><span class="p">.</span><span class="n">mainThread</span><span class="p">())</span>
+                            <span class="p">.</span><span class="n">subscribe</span><span class="p">({</span>
+                                <span class="n">adapter</span><span class="p">.</span><span class="n">matches</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+                                <span class="n">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="s">"MATCH"</span><span class="p">,</span> <span class="s">"got match info!"</span> <span class="p">+</span> <span class="n">adapter</span><span class="p">.</span><span class="n">matches</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+                                <span class="n">adapter</span><span class="p">.</span><span class="n">notifyDataSetChanged</span><span class="p">()</span>
+                            <span class="p">},</span> <span class="p">{</span>
+                                    <span class="n">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="s">"MATCH"</span><span class="p">,</span> <span class="s">"Something went wrong"</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span>
+                                <span class="p">})</span>
+                    <span class="p">}</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="n">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="s">"MATCHES"</span><span class="p">,</span> <span class="s">"Something went wrong"</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span>
+                <span class="p">})</span>
+
+        <span class="p">},</span> <span class="p">{</span>
+            <span class="n">Log</span><span class="p">.</span><span class="n">d</span><span class="p">(</span><span class="s">"SUMMONER"</span><span class="p">,</span> <span class="s">"Something went wrong"</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span>
+        <span class="p">})</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>코드를 간단히 설명하면</p>
+
+<ol>
+  <li>getSumbySumName()을 통해 EditText에 있는 소환사 이름으로 검색한다.</li>
+  <li>소환사 정보를 가져왔다면 getMatchesByAccount()를 통해 유저의 최근 전적 10개를 검색한다.</li>
+  <li>각각의 match에 대해 getMatch()를 통해 전적의 디테일을 가져와 recyclerview adapter에 넘긴다.</li>
+</ol>
+
+<p>이 3개의 로직으로 이루어져 있다.
+더욱 자세한 코드는 <a href="https://github.com/veldic/ingyeo-gg/pull/1">이곳</a>을 참고바란다.</p>
+
+<p>이 과정에서 문제가 발생한다. 10개의 전적을 불러오기 위해 총 11번의 http request를 전송해야 한다는 것이다. (<a href="https://velog.io/@kim6515516/npuls">N+1 query problem</a>과 문제상황이 비슷하다. 그렇다고 api request로 join을 요청할 수는 없지 않은가…) 20개의 전적을 불러오기 위해서는 21번의 http request가 요구되는데 이는 personal api key 제한인 20 requests every 1 second의 제한을 넘어서는 것이다.(personal api key에 대해서는 <a href="https://veldic.github.io/blog/ingyeogg_1/">1번째 포스팅</a> 참고) 물론 production api key를 받게 되면 request 제한이 조금 풀리겠지만 그렇다고 근본적인 문제가 해결되지는 않지 않은가.</p>
+
+<p>또한 api key를 android 코드 내에 저장해야하는 문제도 발생한다. 분명 riot api에서는 api key를 잘 간수하라고 하였다. 하지만 클라이언트에서 직접 request를 날릴 수 있게 되면 애플리케이션을 사용하는 모든 사용자가 api key를 확인할 수 있음을 뜻한다.</p>
+
+<p>결국 backend server가 필요하게 되었다. backend server에 요구되는 사항은 다음과 같다.</p>
+
+<ol>
+  <li>초당, 분당 request 제한을 관리할 것</li>
+  <li>response를 적절히 가공하여 클라이언트에서 사용하기 쉽도록 할 것</li>
+  <li>api key를 잘 간수할 수 있을 것 (최소한 클라이언트가 api key를 알 수 없도록 할 것)</li>
+</ol>
+
+<p>점차 프로젝트가 산으로 가는 것 같지만… 일단 부딫히고 본다.</p>
+
+<h3 id="reference">Reference</h3>
+<p><a href="https://developer.riotgames.com/">Riot Developer Portal</a><br />
+<a href="https://velog.io/@kim6515516/npuls">장고에서 n+1 쿼리 문제 (성능이슈)</a></p>
+</p>
+      		</section>
+
+          <div class="comments-wrapper">
+            <div id="disqus_thread"></div>
+            <script>
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                /*
+                var disqus_config = function () {
+                this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+                */
+                (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = 'https://veldic.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          </div><!-- /.comments-wrapper -->
+
+
+					<!-- Footer -->
+						<footer>
+              <ul class="actions">
+                <li><a href="/blog/" class="button">Our Blog</a></li>
+              </ul>
+						</footer>
+					</div>
+
+				<!-- Footer -->
+        <footer id="footer">
+  <section>
+    <form method="POST" action="https://api.slapform.com/rsual@snu.ac.kr">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" name="slap_replyto" id="email" /> <!-- slap_replyto will set the reply-to as the submitter's email! -->
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea name="message" id="message" rows="3"></textarea>
+      </div>
+      <ul class="actions">
+        <li><input type="submit" value="Send Message" /></li>
+      </ul>
+      <input type="hidden" name="slap_redirect" value="https://veldic.github.io/thank-you" /> <!-- slap_redirect allows you to set a custom redirect/thank you page -->
+    </form>
+  </section>
+  <section class="split contact">
+    <section class="alt">
+      <h3>Location</h3>
+      <p>Seoul, South Korea</p>
+    </section>
+    
+    <section>
+      <h3>Email</h3>
+      <p><a href="mailto:rsual@snu.ac.kr">rsual@snu.ac.kr</a></p>
+    </section>
+    <section>
+      <h3>Social</h3>
+      <ul class="icons alt">
+        <li><a href="https://facebook.com/veldic" class="icon fa-facebook" rel="nofollow"><span class="label">Facebook</span></a></li>
+        <li><a href="https://instagram.com/square_min_v" class="icon fa-instagram" rel="nofollow"><span class="label">Instagram</span></a></li>
+        <li><a href="https://github.com/veldic" class="icon fa-github" rel="nofollow"><span class="label">GitHub</span></a></li>
+      </ul>
+    </section>
+  </section>
+</footer>
+<!-- Copyright -->
+<div id="copyright">
+  <ul><li>&copy; HTML5 UP</li><li>Design by <a href="https://html5up.net" rel="nofollow">HTML5 UP</a></li><li>Jekyll Integration by <a href="https://slapform.com">Slapform</a> </li></ul>
+</div>
+
+
+			</div>
+
+      <!-- Scripts -->
+  		<!-- DYN -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.scrollex.min.js"></script>
+<script src="/assets/js/jquery.scrolly.min.js"></script>
+<script src="/assets/js/skel.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/main.js"></script>
+
+			<script async src="https://www.googletagmanager.com/gtag/js?id=default"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'default');
+</script>
+
+
+	</body>
+</html>
