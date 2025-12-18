@@ -6,7 +6,8 @@
 @font-face {
   font-family: "Binggrae";
   src:
-    local("Binggrae"),
+    local("Binggrae II"),
+    local("BinggraeII"),
     url("/assets/fonts/BinggraeII.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -18,7 +19,7 @@
   src:
     local("Binggrae Bold"),
     local("Binggrae-Bold"),
-    url("/assets/fonts/BinggraeII-Bold.ttf") format("truetype");
+    url("/assets/fonts/Binggrae-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
