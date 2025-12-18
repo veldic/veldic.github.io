@@ -1,0 +1,45 @@
+{% assign pub = include.pub %}
+{% assign is_detailed = include.detailed | default: false %}
+{% assign labels = site.data.publication_links.labels %}
+{% assign card_classes = "publication-card" %}
+{% if is_detailed %}
+  {% assign card_classes = card_classes | append: " detailed" %}
+{% endif %}
+{% assign body_class = is_detailed | default: false %}
+{% if is_detailed %}
+  {% assign body_class = "publication-content" %}
+{% else %}
+  {% assign body_class = "publication-body" %}
+{% endif %}
+{% assign title_tag = is_detailed | default: false %}
+{% if is_detailed %}
+  {% assign title_tag = "h2" %}
+{% else %}
+  {% assign title_tag = "h3" %}
+{% endif %}
+
+<article class="{{ card_classes }}">
+  <div class="publication-image" style="background-image: url('{{ pub.image | default: '' }}');"></div>
+  <div class="{{ body_class }}">
+    {% if title_tag == "h2" %}
+      <h2>{{ pub.title }}</h2>
+    {% else %}
+      <h3>{{ pub.title }}</h3>
+    {% endif %}
+    <p class="authors">{{ pub.authors }}</p>
+    {% if pub.venue %}
+      <p class="publication-venue">{{ pub.venue }}</p>
+    {% endif %}
+    <div class="publication-links">
+      {% if pub.project_url %}
+        <a href="{{ pub.project_url }}">{{ labels.project }}</a>
+      {% endif %}
+      {% if pub.paper_url %}
+        <a href="{{ pub.paper_url }}">{{ labels.paper }}</a>
+      {% endif %}
+      {% if pub.code_url %}
+        <a href="{{ pub.code_url }}">{{ labels.code }}</a>
+      {% endif %}
+    </div>
+  </div>
+</article>

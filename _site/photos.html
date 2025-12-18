@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <title>Photos - Seungmin Lee</title>
+    <link rel="preload" href="/assets/fonts/BinggraeII.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="/assets/fonts/BinggraeII-Bold.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <script>
+      (function() {
+        var storageKey = 'veldic-theme';
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var storedTheme = localStorage.getItem(storageKey);
+        var theme = storedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="site-brand" href="/">Seungmin Lee</a>
+        <nav class="site-nav">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/publications" class="nav-link">Publications</a>
+          <a href="/photos" class="nav-link is-active">Photos</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme">
+          <span class="toggle-icon" aria-hidden="true"></span>
+          <span class="toggle-label">Light</span>
+        </button>
+      </header>
+      <main class="site-main">
+        
+<section class="page-hero">
+  <h1>Photos</h1>
+  <p>
+    As an amateur photographer, I’d like to show some of my photos here. Feel free to browse around and enjoy.
+  </p>
+</section>
+
+<section class="photo-grid">
+  
+  <figure class="photo-card">
+    <button type="button" class="photo-media" style="background-image: url('/assets/images/photos/Korea-GongJu-February-2025.jpeg');" data-image="/assets/images/photos/Korea-GongJu-February-2025.jpeg" data-title="Gongju - Korea" data-date="February 2025" aria-label="Gongju - Korea">
+      <div class="photo-overlay">
+        <h2>Gongju - Korea</h2>
+        <p>February 2025</p>
+      </div>
+    </button>
+  </figure>
+  
+  <figure class="photo-card">
+    <button type="button" class="photo-media" style="background-image: url('/assets/images/photos/Korea-Seoul-March-2025.jpeg');" data-image="/assets/images/photos/Korea-Seoul-March-2025.jpeg" data-title="Seoul - Korea" data-date="March 2025" aria-label="Seoul - Korea">
+      <div class="photo-overlay">
+        <h2>Seoul - Korea</h2>
+        <p>March 2025</p>
+      </div>
+    </button>
+  </figure>
+  
+</section>
+
+<div class="photo-lightbox" id="photo-lightbox" aria-hidden="true">
+  <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+  <div class="lightbox-content" role="dialog" aria-modal="true">
+    <button class="lightbox-close" type="button" aria-label="Close photo viewer">&times;</button>
+    <img src="" alt="" id="lightbox-image" />
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var lightbox = document.getElementById('photo-lightbox');
+    if (!lightbox) return;
+    var imageEl = document.getElementById('lightbox-image');
+    var captionEl = document.getElementById('lightbox-caption');
+    var closeBtn = lightbox.querySelector('.lightbox-close');
+    var backdrop = document.getElementById('lightbox-backdrop');
+    function openLightbox(target) {
+      var src = target.dataset.image;
+      var title = target.dataset.title;
+      var date = target.dataset.date;
+      imageEl.src = src;
+      imageEl.alt = title;
+      captionEl.textContent = title + ' — ' + date;
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      imageEl.src = '';
+    }
+    document.querySelectorAll('.photo-media').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        openLightbox(btn);
+      });
+    });
+    closeBtn.addEventListener('click', closeLightbox);
+    backdrop.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function(evt) {
+      if (evt.key === 'Escape' && lightbox.classList.contains('is-open')) {
+        closeLightbox();
+      }
+    });
+  })();
+</script>
+
+
+      </main>
+      <footer class="site-footer">
+        <p>Theme by <a href="https://veldic.github.io" target="_blank" rel="noopener noreferrer">Veldic</a></p>
+      </footer>
+    </div>
+    <script>
+      (function() {
+        var storageKey = 'veldic-theme';
+        var root = document.documentElement;
+        var toggle = document.getElementById('theme-toggle');
+        function setTheme(theme) {
+          root.dataset.theme = theme;
+          localStorage.setItem(storageKey, theme);
+          if (toggle) {
+            toggle.querySelector('.toggle-label').textContent = theme === 'dark' ? 'Dark' : 'Light';
+          }
+        }
+        if (toggle) {
+          toggle.addEventListener('click', function() {
+            var nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            setTheme(nextTheme);
+          });
+          setTheme(root.dataset.theme || 'light');
+        }
+      })();
+    </script>
+  </body>
+</html>

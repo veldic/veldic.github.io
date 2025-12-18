@@ -1,0 +1,33 @@
+hero:
+  eyebrow: "Computer Graphics · Computer Vision"
+  name: "Seungmin Lee"
+  subtitle: "Undergraduate Student · Seoul National University"
+  intro:
+    - "I am an undergraduate student in Computer Science and Engineering at Seoul National University, and a research intern at the <a href=\"https://3d.snu.ac.kr\">3D Vision Lab</a> in the Department of Electrical and Computer Engineering, advised by Prof. Youngmin Kim."
+    - "My research focuses on computer graphics and computer vision, particularly on realistic and abstract 3D scene reconstruction."
+  profile_placeholder: "Photo"
+  photo:
+    src:
+    alt: "Seungmin Lee"
+
+education:
+  eyebrow: "Education"
+  entries:
+    - degree: "B.S. in CSE"
+      school: "Seoul National University"
+      period: "2019.03 – 2026.02 (Expected)"
+
+experiences:
+  eyebrow: "Experience"
+  entries:
+    - role: "Undergraduate Research Intern"
+      organization: "3D Vision Lab, SNU ECE"
+      period: "2025.02 – 2026.02 (Expected)"
+
+contact_links:
+  - label: "Email"
+    url: "mailto:rsual@snu.ac.kr"
+  - label: "GitHub"
+    url: "https://github.com/veldic"
+  # - label: "LinkedIn"
+  #   url: "https://linkedin.com/in/username"
