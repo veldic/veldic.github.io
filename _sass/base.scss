@@ -584,9 +584,9 @@ p {
     gap: 0.4rem;
   }
 
-  .publication-card,
+
   .publication-card.detailed {
-    grid-template-columns: 1fr;
+    grid-template-columns: 140px 1fr;
   }
 
   .hero-visual {
