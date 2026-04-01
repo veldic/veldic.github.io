@@ -35,7 +35,7 @@ title: "Home"
     <div>
       <p class="eyebrow">Publications</p>
     </div>
-    <a class="button text" href="{{ "/publications/" | relative_url }}">View More</a>
+    <a class="button text" href="{{ "/publications" | relative_url }}">View More</a>
   </div>
   <div class="publication-grid">
     {% for pub in site.data.publications limit: 2 %}
