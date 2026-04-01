@@ -22,7 +22,9 @@ Edit `_data/*` files to update content:
 
 - Grid cards load thumbnails from `assets/images/photos/thumbnails/` while the viewer still opens the original file.
 - Run `bash scripts/generate_photo_thumbnails.sh` to regenerate thumbnails locally.
-- GitHub Actions automatically refreshes thumbnails on pushes that change photos or the generator workflow.
+- The GitHub Pages deployment workflow generates thumbnails during build, so they are deployed without being committed back to the repository.
+- If a thumbnail is missing in local development, the gallery falls back to the original image automatically.
+- To use the deploy-time thumbnail pipeline on GitHub, set `Settings > Pages > Build and deployment > Source` to `GitHub Actions` once.
 
 ## Development
 

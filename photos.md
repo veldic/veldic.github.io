@@ -28,7 +28,8 @@ permalink: /photos
            alt=""
            aria-hidden="true"
            loading="lazy"
-           decoding="async">
+           decoding="async"
+           onerror="this.onerror=null;this.src='{{ photo.image }}';">
       <div class="photo-overlay">
         <h2>{{ photo.title }}</h2>
         <p>{{ photo.date }}</p>
