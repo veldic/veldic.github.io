@@ -14,12 +14,21 @@ permalink: /photos
 
 <section class="photo-grid">
   {% for photo in photos %}
+  {% assign photo_thumbnail = photo.thumbnail %}
+  {% unless photo_thumbnail %}
+    {% assign photo_thumbnail = photo.image | replace: '/assets/images/photos/', '/assets/images/photos/thumbnails/' %}
+  {% endunless %}
   <figure class="photo-card">
-    <button type="button" class="photo-media" style="background-image: url('{{ photo.image | default: "" }}');"
+    <button type="button" class="photo-media"
             data-image="{{ photo.image }}"
             data-title="{{ photo.title }}"
             data-date="{{ photo.date }}"
             aria-label="{{ photo.title }}">
+      <img src="{{ photo_thumbnail }}"
+           alt=""
+           aria-hidden="true"
+           loading="lazy"
+           decoding="async">
       <div class="photo-overlay">
         <h2>{{ photo.title }}</h2>
         <p>{{ photo.date }}</p>
@@ -31,10 +40,13 @@ permalink: /photos
 
 <div class="photo-lightbox" id="photo-lightbox" aria-hidden="true">
   <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
-  <div class="lightbox-content" role="dialog" aria-modal="true">
+  <div class="lightbox-content" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-describedby="lightbox-date">
     <button class="lightbox-close" type="button" aria-label="Close photo viewer">&times;</button>
     <img src="" alt="" id="lightbox-image">
-    <p class="lightbox-caption" id="lightbox-caption"></p>
+    <div class="lightbox-info">
+      <p class="lightbox-title" id="lightbox-title"></p>
+      <p class="lightbox-date" id="lightbox-date"></p>
+    </div>
   </div>
 </div>
 
@@ -43,7 +55,8 @@ permalink: /photos
     var lightbox = document.getElementById('photo-lightbox');
     if (!lightbox) return;
     var imageEl = document.getElementById('lightbox-image');
-    var captionEl = document.getElementById('lightbox-caption');
+    var titleEl = document.getElementById('lightbox-title');
+    var dateEl = document.getElementById('lightbox-date');
     var closeBtn = lightbox.querySelector('.lightbox-close');
     var backdrop = document.getElementById('lightbox-backdrop');
     function openLightbox(target) {
@@ -52,7 +65,8 @@ permalink: /photos
       var date = target.dataset.date;
       imageEl.src = src;
       imageEl.alt = title;
-      captionEl.textContent = title + ' — ' + date;
+      titleEl.textContent = title;
+      dateEl.textContent = date;
       lightbox.classList.add('is-open');
       lightbox.setAttribute('aria-hidden', 'false');
     }
@@ -60,6 +74,8 @@ permalink: /photos
       lightbox.classList.remove('is-open');
       lightbox.setAttribute('aria-hidden', 'true');
       imageEl.src = '';
+      titleEl.textContent = '';
+      dateEl.textContent = '';
     }
     document.querySelectorAll('.photo-media').forEach(function(btn) {
       btn.addEventListener('click', function() {

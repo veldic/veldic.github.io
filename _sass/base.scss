@@ -349,12 +349,18 @@ p {
   aspect-ratio: 4 / 3;
   border: none;
   padding: 0;
-  background-size: cover;
-  background-position: center;
+  background: none;
   position: relative;
   overflow: hidden;
   cursor: pointer;
   display: block;
+}
+
+.photo-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
 }
 
 .photo-media::before {
@@ -408,6 +414,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1.5rem;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -427,27 +434,42 @@ p {
 
 .lightbox-content {
   position: relative;
-  background: var(--bg);
-  padding: 0.75rem;
-  max-width: min(85vw, 560px);
+  z-index: 1;
+  max-width: min(92vw, 1200px);
+  max-height: calc(100vh - 3rem);
   width: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
-  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.35);
 }
 
 .lightbox-content img {
-  width: min(70vw, 520px);
+  display: block;
+  width: auto;
+  max-width: min(92vw, 1200px);
+  max-height: calc(100vh - 10rem);
   height: auto;
   object-fit: contain;
 }
 
-.lightbox-caption {
+.lightbox-info {
+  color: #fff;
+}
+
+.lightbox-title,
+.lightbox-date {
   margin: 0;
-  text-align: center;
+}
+
+.lightbox-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.lightbox-date {
   font-size: 0.95rem;
+  opacity: 0.82;
 }
 
 .lightbox-close {
@@ -458,7 +480,8 @@ p {
   background: none;
   font-size: 2rem;
   line-height: 1;
-  color: var(--text);
+  color: #fff;
+  text-shadow: 0 0.2rem 0.7rem rgba(0, 0, 0, 0.45);
   cursor: pointer;
 }
 
@@ -603,6 +626,24 @@ p {
 
   .photo-grid {
     grid-template-columns: 1fr;
+  }
+
+  .photo-lightbox {
+    padding: 1rem;
+  }
+
+  .lightbox-content {
+    max-width: 100%;
+  }
+
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: calc(100vh - 8rem);
+  }
+
+  .lightbox-close {
+    top: 0.5rem;
+    right: 0.5rem;
   }
 }
 
