@@ -18,6 +18,3 @@ node_modules/
 .sass-cache/
 .parcel-cache/
 .cache/
-
-# Thumbnails
-assets/images/photos/thumbnails/
