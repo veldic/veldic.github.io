@@ -26,9 +26,14 @@
           <a href="{{ "/publications" | relative_url }}" class="nav-link{% if page.url contains "/publications" %} is-active{% endif %}">Publications</a>
           <a href="{{ "/photos" | relative_url }}" class="nav-link{% if page.url contains "/photos" %} is-active{% endif %}">Photos</a>
         </nav>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle color theme">
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle color theme"
+          style="--icon-light: url('{{ '/assets/icons/light.svg' | relative_url }}'); --icon-dark: url('{{ '/assets/icons/dark.svg' | relative_url }}');">
           <span class="toggle-icon" aria-hidden="true"></span>
-          <span class="toggle-label">Light</span>
+          <span class="sr-only toggle-label">Light theme active</span>
         </button>
       </header>
       <main class="site-main">
@@ -44,10 +49,14 @@
         var root = document.documentElement;
         var toggle = document.getElementById('theme-toggle');
         function setTheme(theme) {
+          var nextTheme = theme === 'dark' ? 'light' : 'dark';
           root.dataset.theme = theme;
           localStorage.setItem(storageKey, theme);
           if (toggle) {
-            toggle.querySelector('.toggle-label').textContent = theme === 'dark' ? 'Dark' : 'Light';
+            toggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+            toggle.setAttribute('aria-label', 'Current theme: ' + theme + '. Switch to ' + nextTheme + ' theme.');
+            toggle.setAttribute('title', 'Switch to ' + nextTheme + ' theme');
+            toggle.querySelector('.toggle-label').textContent = theme === 'dark' ? 'Dark theme active' : 'Light theme active';
           }
         }
         if (toggle) {
