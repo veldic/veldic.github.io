@@ -14,7 +14,29 @@ title: "Home"
     {% endfor %}
     <div class="hero-links">
       {% for link in info.contact_links %}
-      <a class="contact-link" href="{{ link.url }}">{{ link.label }}</a>
+      {% assign contact_kind = link.icon | default: link.label | downcase %}
+      {% assign contact_icon = "" %}
+      {% case contact_kind %}
+        {% when "email" %}
+          {% assign contact_icon = "/assets/icons/mail.svg" | relative_url %}
+        {% when "mail" %}
+          {% assign contact_icon = "/assets/icons/mail.svg" | relative_url %}
+        {% when "e-mail" %}
+          {% assign contact_icon = "/assets/icons/mail.svg" | relative_url %}
+        {% when "github" %}
+          {% assign contact_icon = "/assets/icons/github.svg" | relative_url %}
+        {% when "linkedin" %}
+          {% assign contact_icon = "/assets/icons/linkedin.svg" | relative_url %}
+      {% endcase %}
+      <a class="contact-link"
+         href="{{ link.url }}"
+         {% unless link.url contains "mailto:" %}target="_blank" rel="noopener noreferrer"{% endunless %}
+         {% if contact_icon != "" %}style="--contact-icon: url('{{ contact_icon }}');"{% endif %}>
+        {% if contact_icon != "" %}
+        <span class="contact-link-icon" aria-hidden="true"></span>
+        {% endif %}
+        <span class="contact-link-label">{{ link.label }}</span>
+      </a>
       {% endfor %}
     </div>
   </div>

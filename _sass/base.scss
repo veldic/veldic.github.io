@@ -255,20 +255,58 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  font-size: 0.9rem;
-  letter-spacing: 0.02em;
 }
 
 .contact-link {
-  color: var(--accent);
-  border: none;
-  padding-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 999px;
+  padding: 0.5rem 0.85rem;
   font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  transition:
+    color var(--theme-transition-duration) ease,
+    background var(--theme-transition-duration) ease,
+    border-color var(--theme-transition-duration) ease,
+    transform 0.2s ease;
+}
+
+.contact-link-icon {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: var(--contact-icon);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-image: var(--contact-icon);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }
 
 .contact-link:hover {
-  color: var(--text);
-  text-decoration: underline;
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.contact-link:focus-visible {
+  outline: none;
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+  box-shadow: 0 0 0 0.2rem var(--accent-soft);
 }
 
 .hero-visual {
@@ -638,10 +676,16 @@ p {
 
 @media (max-width: 720px) {
   .site-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 0.5rem;
+    column-gap: 0.75rem;
     padding: 0.85rem 1rem;
+  }
+
+  .site-brand {
+    flex: 1;
+    min-width: 0;
   }
 
   .site-main {
@@ -651,6 +695,8 @@ p {
   }
 
   .site-nav {
+    order: 3;
+    flex: 0 0 100%;
     width: 100%;
     overflow-x: auto;
     padding-bottom: 0.5rem;
@@ -662,7 +708,9 @@ p {
   }
 
   .theme-toggle {
-    align-self: flex-start;
+    order: 2;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   .hero {
@@ -679,7 +727,8 @@ p {
   }
 
   .hero-links {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0.4rem;
   }
 
