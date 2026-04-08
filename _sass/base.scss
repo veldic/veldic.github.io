@@ -127,6 +127,7 @@ p {
   border: 1px solid var(--theme-toggle-border);
   background: var(--theme-toggle-bg);
   color: var(--theme-toggle-color);
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -175,6 +176,67 @@ p {
 [data-theme="dark"] .toggle-icon {
   -webkit-mask-image: var(--icon-dark);
   mask-image: var(--icon-dark);
+}
+
+.theme-easter-egg {
+  --egg-x-start: 0rem;
+  --egg-x-mid: 0rem;
+  --egg-x-end: 0rem;
+  --egg-rotate-start: -8deg;
+  --egg-rotate-mid: 0deg;
+  --egg-rotate-end: 8deg;
+  position: absolute;
+  left: 50%;
+  top: 0.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(calc(-50% + var(--egg-x-start)), 0.35rem) scale(0.55) rotate(var(--egg-rotate-start));
+  transform-origin: center;
+  filter:
+    drop-shadow(0 0 0.08rem rgba(15, 23, 42, 0.72))
+    drop-shadow(0 0.2rem 0.28rem rgba(15, 23, 42, 0.18))
+    drop-shadow(0 0 0.18rem rgba(47, 112, 208, 0.12));
+}
+
+.theme-easter-egg img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.theme-easter-egg.is-visible {
+  animation: theme-easter-egg-rise 1.1s ease-out both;
+}
+
+[data-theme="dark"] .theme-easter-egg {
+  filter:
+    drop-shadow(0 0 0.08rem rgba(248, 250, 252, 0.38))
+    drop-shadow(0 0.24rem 0.34rem rgba(15, 23, 42, 0.3))
+    drop-shadow(0 0 0.2rem rgba(122, 162, 247, 0.14));
+}
+
+@keyframes theme-easter-egg-rise {
+  0% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--egg-x-start)), 0.35rem) scale(0.55) rotate(var(--egg-rotate-start));
+  }
+
+  18% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--egg-x-mid)), -0.25rem) scale(0.95) rotate(var(--egg-rotate-mid));
+  }
+
+  68% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--egg-x-end)), -1rem) scale(1) rotate(calc(var(--egg-rotate-mid) * -1));
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--egg-x-end)), -1.55rem) scale(0.82) rotate(var(--egg-rotate-end));
+  }
 }
 
 .sr-only {

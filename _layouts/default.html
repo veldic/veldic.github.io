@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <title>{{ page.title }} - {{ site.title }}</title>
+    <link rel="icon" href="{{ '/assets/icons/favicon.svg' | relative_url }}" type="image/svg+xml">
     <link rel="preload" href="{{ '/assets/fonts/BinggraeII.ttf' | relative_url }}" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="{{ '/assets/fonts/Binggrae-Bold.ttf' | relative_url }}" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
@@ -34,6 +35,9 @@
           style="--icon-light: url('{{ '/assets/icons/light.svg' | relative_url }}'); --icon-dark: url('{{ '/assets/icons/dark.svg' | relative_url }}');">
           <span class="toggle-icon" aria-hidden="true"></span>
           <span class="sr-only toggle-label">Light theme active</span>
+          <span class="theme-easter-egg" aria-hidden="true">
+            <img src="{{ '/assets/icons/favicon.svg' | relative_url }}" alt="">
+          </span>
         </button>
       </header>
       <main class="site-main">
@@ -48,6 +52,10 @@
         var storageKey = 'veldic-theme';
         var root = document.documentElement;
         var toggle = document.getElementById('theme-toggle');
+        var easterEgg = toggle ? toggle.querySelector('.theme-easter-egg') : null;
+        var pressTimer = 0;
+        var longPressTriggered = false;
+        var longPressDelay = 700;
         function setTheme(theme) {
           var nextTheme = theme === 'dark' ? 'light' : 'dark';
           root.dataset.theme = theme;
@@ -59,8 +67,47 @@
             toggle.querySelector('.toggle-label').textContent = theme === 'dark' ? 'Dark theme active' : 'Light theme active';
           }
         }
+        function clearPressTimer() {
+          if (!pressTimer) return;
+          window.clearTimeout(pressTimer);
+          pressTimer = 0;
+        }
+        function showEasterEgg() {
+          if (!easterEgg) return;
+          easterEgg.style.setProperty('--egg-x-start', ((Math.random() * 0.36) - 0.18).toFixed(3) + 'rem');
+          easterEgg.style.setProperty('--egg-x-mid', ((Math.random() * 0.9) - 0.45).toFixed(3) + 'rem');
+          easterEgg.style.setProperty('--egg-x-end', ((Math.random() * 1.2) - 0.6).toFixed(3) + 'rem');
+          easterEgg.style.setProperty('--egg-rotate-start', ((Math.random() * 20) - 10).toFixed(2) + 'deg');
+          easterEgg.style.setProperty('--egg-rotate-mid', ((Math.random() * 12) - 6).toFixed(2) + 'deg');
+          easterEgg.style.setProperty('--egg-rotate-end', ((Math.random() * 24) - 12).toFixed(2) + 'deg');
+          easterEgg.classList.remove('is-visible');
+          void easterEgg.offsetWidth;
+          easterEgg.classList.add('is-visible');
+        }
+        function startLongPress(evt) {
+          if (evt.pointerType === 'mouse' && evt.button !== 0) return;
+          longPressTriggered = false;
+          clearPressTimer();
+          pressTimer = window.setTimeout(function() {
+            longPressTriggered = true;
+            showEasterEgg();
+          }, longPressDelay);
+        }
         if (toggle) {
+          if (easterEgg) {
+            easterEgg.addEventListener('animationend', function() {
+              easterEgg.classList.remove('is-visible');
+            });
+          }
+          toggle.addEventListener('pointerdown', startLongPress);
+          toggle.addEventListener('pointerup', clearPressTimer);
+          toggle.addEventListener('pointerleave', clearPressTimer);
+          toggle.addEventListener('pointercancel', clearPressTimer);
           toggle.addEventListener('click', function() {
+            if (longPressTriggered) {
+              longPressTriggered = false;
+              return;
+            }
             var nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
             setTheme(nextTheme);
           });
