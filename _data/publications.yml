@@ -1,6 +1,6 @@
 - 
   title: "LTGS: Long-Term Gaussian Scene Chronology from Sparse View Updates"
-  authors: "Minkwan Kim, Junho Kim, <strong>Seungmin Lee</strong>, Young Min Kim"
+  authors: "Minkwan Kim, <strong>Seungmin Lee</strong>, Junho Kim, Young Min Kim"
   venue: "IEEE Conference on Computer Vision and Pattern Recognition (CVPR) Findings, 2026"
   image: "/assets/images/publications/LTGS.png"
   project_url: "https://https://mkjjang3598.github.io/LTGS/"
