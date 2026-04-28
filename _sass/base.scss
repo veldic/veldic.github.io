@@ -423,6 +423,183 @@ p {
   margin: 0;
 }
 
+.photo-slideshow {
+  --photo-slide-gap: 0.65rem;
+  --photo-visible-count: 4;
+  width: 100%;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.photo-slideshow-viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-slideshow-track {
+  display: flex;
+  gap: var(--photo-slide-gap);
+  transition: transform 0.42s ease;
+  will-change: transform;
+}
+
+.photo-slide {
+  position: relative;
+  flex: 0 0 calc((100% - 1.95rem) / 4);
+  aspect-ratio: 2 / 3;
+  display: block;
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.03);
+  transition:
+    border-color var(--theme-transition-duration) ease,
+    transform 0.2s ease;
+}
+
+.photo-slide:hover,
+.photo-slide:focus-visible {
+  text-decoration: none;
+}
+
+.photo-slide:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 0.18rem var(--accent-soft);
+}
+
+.photo-slide:hover {
+  transform: translateY(-2px);
+}
+
+.photo-slide img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transform: scale(1.01);
+}
+
+.photo-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, 0.7) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0) 62%);
+}
+
+.home-photo-caption {
+  position: absolute;
+  left: 0.65rem;
+  right: 0.65rem;
+  bottom: 0.65rem;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  text-shadow: 0 0.16rem 0.65rem rgba(0, 0, 0, 0.62);
+}
+
+.home-photo-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.12;
+}
+
+.home-photo-date {
+  font-size: 0.72rem;
+  opacity: 0.9;
+}
+
+.photo-slideshow-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.photo-slideshow-button {
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+  transition:
+    background var(--theme-transition-duration) ease,
+    border-color var(--theme-transition-duration) ease,
+    color var(--theme-transition-duration) ease,
+    transform 0.2s ease;
+}
+
+.photo-slideshow-button:hover,
+.photo-slideshow-button:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.photo-slideshow-dots {
+  min-height: 1.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.photo-slideshow-dot {
+  width: 0.52rem;
+  height: 0.52rem;
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.65;
+  padding: 0;
+  transition:
+    background var(--theme-transition-duration) ease,
+    border-color var(--theme-transition-duration) ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.photo-slideshow-dot:hover,
+.photo-slideshow-dot:focus-visible,
+.photo-slideshow-dot.is-active {
+  border-color: var(--accent);
+  background: var(--accent);
+  opacity: 1;
+}
+
+.photo-slideshow-dot:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem var(--accent-soft);
+}
+
+.photo-slideshow-dot.is-active {
+  transform: scale(1.15);
+}
+
+.photo-slideshow.is-static .photo-slideshow-controls {
+  display: none;
+}
+
+.photo-slideshow-button:disabled,
+.photo-slideshow-dot:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
 .publication-grid,
 .publication-list {
   border-top: 1px solid var(--line);
@@ -845,6 +1022,36 @@ p {
 
   .photo-grid {
     grid-template-columns: 1fr;
+  }
+
+  .photo-slideshow {
+    --photo-visible-count: 2;
+  }
+
+  .photo-slide {
+    flex-basis: calc((100% - 0.65rem) / 2);
+  }
+
+  .home-photo-caption {
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+  }
+
+  .home-photo-title {
+    font-size: 0.82rem;
+  }
+
+  .home-photo-date {
+    font-size: 0.7rem;
+  }
+
+  .photo-slideshow-controls {
+    justify-content: center;
+  }
+
+  .photo-slideshow-dots {
+    flex: 0 1 auto;
   }
 
   .photo-lightbox {

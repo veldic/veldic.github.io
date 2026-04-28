@@ -106,3 +106,166 @@ title: "Home"
   </div>
 </section>
 {% endif %}
+
+{% if site.data.photos.size > 0 %}
+<section class="home-section home-photo-preview" id="featured-photos">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Photos</p>
+    </div>
+    <a class="button text" href="{{ "/photos" | relative_url }}">View All</a>
+  </div>
+  <div class="photo-slideshow" data-home-slideshow>
+    <div class="photo-slideshow-viewport">
+      <div class="photo-slideshow-track">
+        {% for photo in site.data.photos limit: 8 %}
+        {% assign photo_thumbnail = photo.thumbnail %}
+        {% unless photo_thumbnail %}
+          {% assign photo_thumbnail = photo.image | replace: '/assets/images/photos/', '/assets/images/photos/thumbnails/' %}
+        {% endunless %}
+        <a class="photo-slide"
+           href="{{ "/photos" | relative_url }}"
+           data-slide-index="{{ forloop.index0 }}"
+           aria-label="View photos: {{ photo.title | escape }} from {{ photo.date | escape }}">
+          <img src="{{ photo_thumbnail | relative_url }}"
+               alt="{{ photo.title | escape }}, {{ photo.date | escape }}"
+               {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+               decoding="async"
+               onerror="this.onerror=null;this.src='{{ photo.image | relative_url }}';">
+          <span class="home-photo-caption" aria-hidden="true">
+            <span class="home-photo-title">{{ photo.title }}</span>
+            <span class="home-photo-date">{{ photo.date }}</span>
+          </span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="photo-slideshow-controls">
+      <button type="button" class="photo-slideshow-button" data-slide-prev aria-label="Previous photo">
+        <span aria-hidden="true">&lt;</span>
+      </button>
+      <div class="photo-slideshow-dots" aria-label="Photo slideshow">
+        {% for photo in site.data.photos limit: 8 %}
+        <button type="button"
+                class="photo-slideshow-dot{% if forloop.first %} is-active{% endif %}"
+                data-slide-dot="{{ forloop.index0 }}"
+                aria-label="Show photo {{ forloop.index }}"></button>
+        {% endfor %}
+      </div>
+      <button type="button" class="photo-slideshow-button" data-slide-next aria-label="Next photo">
+        <span aria-hidden="true">&gt;</span>
+      </button>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<script>
+  (function() {
+    var slideshow = document.querySelector('[data-home-slideshow]');
+    if (!slideshow) return;
+
+    var track = slideshow.querySelector('.photo-slideshow-track');
+    var slides = Array.prototype.slice.call(slideshow.querySelectorAll('.photo-slide'));
+    var dots = Array.prototype.slice.call(slideshow.querySelectorAll('[data-slide-dot]'));
+    var prevButton = slideshow.querySelector('[data-slide-prev]');
+    var nextButton = slideshow.querySelector('[data-slide-next]');
+    var activeIndex = 0;
+    var timer = 0;
+    var interval = 5500;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function getVisibleCount() {
+      var visibleCount = parseInt(window.getComputedStyle(slideshow).getPropertyValue('--photo-visible-count'), 10);
+      return Math.min(slides.length, Math.max(1, visibleCount || 1));
+    }
+
+    function getMaxIndex() {
+      return Math.max(0, slides.length - getVisibleCount());
+    }
+
+    function updateControls(maxIndex) {
+      dots.forEach(function(dot, dotIndex) {
+        var isAvailable = dotIndex <= maxIndex;
+        dot.hidden = !isAvailable;
+        dot.disabled = !isAvailable;
+        dot.classList.toggle('is-active', dotIndex === activeIndex);
+      });
+
+      var isStatic = maxIndex === 0;
+      slideshow.classList.toggle('is-static', isStatic);
+      if (prevButton) prevButton.disabled = isStatic;
+      if (nextButton) nextButton.disabled = isStatic;
+    }
+
+    function setActive(index) {
+      if (!slides.length) return;
+      var visibleCount = getVisibleCount();
+      var maxIndex = getMaxIndex();
+      activeIndex = (index + maxIndex + 1) % (maxIndex + 1);
+
+      track.style.transform = 'translate3d(-' + slides[activeIndex].offsetLeft + 'px, 0, 0)';
+
+      slides.forEach(function(slide, slideIndex) {
+        var isVisible = slideIndex >= activeIndex && slideIndex < activeIndex + visibleCount;
+        slide.classList.toggle('is-active', isVisible);
+        slide.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+        slide.tabIndex = isVisible ? 0 : -1;
+      });
+
+      updateControls(maxIndex);
+    }
+
+    function stop() {
+      if (!timer) return;
+      window.clearInterval(timer);
+      timer = 0;
+    }
+
+    function start() {
+      if (reduceMotion || getMaxIndex() === 0) return;
+      stop();
+      timer = window.setInterval(function() {
+        setActive(activeIndex + 1);
+      }, interval);
+    }
+
+    if (getMaxIndex() === 0) {
+      setActive(0);
+      slideshow.classList.add('is-static');
+      return;
+    }
+
+    prevButton.addEventListener('click', function() {
+      setActive(activeIndex - 1);
+      start();
+    });
+
+    nextButton.addEventListener('click', function() {
+      setActive(activeIndex + 1);
+      start();
+    });
+
+    dots.forEach(function(dot) {
+      dot.addEventListener('click', function() {
+        setActive(Number(dot.dataset.slideDot));
+        start();
+      });
+    });
+
+    slideshow.addEventListener('mouseenter', stop);
+    slideshow.addEventListener('mouseleave', start);
+    slideshow.addEventListener('focusin', stop);
+    slideshow.addEventListener('focusout', function(evt) {
+      if (slideshow.contains(evt.relatedTarget)) return;
+      start();
+    });
+    window.addEventListener('resize', function() {
+      setActive(Math.min(activeIndex, getMaxIndex()));
+      start();
+    });
+
+    setActive(0);
+    start();
+  })();
+</script>
